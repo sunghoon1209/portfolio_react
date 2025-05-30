@@ -1,21 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
-import AppRouter from "./router/Router";
+
+import AppRouter from "./router/router.jsx";
 import GlobalStyle from "./styles/GlobalStyle";
-import Header from "./components/common/Header";
-import StyledInner from "./components/common/Inner";
+
 function App() {
 
   return (
     <BrowserRouter>
-      <GlobalStyle></GlobalStyle>
-      <Header></Header>
-      <main>      
-        <StyledInner>
-          <AppRouter>
-            
-          </AppRouter>
-        </StyledInner>  
-      </main>
+      <GlobalStyle></GlobalStyle>  
+      <AppRouter></AppRouter>
+
     </BrowserRouter> 
 
     

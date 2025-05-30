@@ -48,6 +48,7 @@ const Header = ()=>{
                     <ul>
                         <li onClick={()=>{navigate('/')}}>Home</li>
                         <li onClick={()=>{navigate('/works')}}>Works</li>                    
+                        <li onClick={()=>{navigate('/admin/main')}}>Admin</li>                    
                     </ul>
                     
                 </StyledHeaderNav>
