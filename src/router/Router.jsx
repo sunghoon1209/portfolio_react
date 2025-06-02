@@ -27,7 +27,7 @@ const UserRouter = ()=>{
 const AdminRouter = ()=>{
     return(
         <Routes>
-            <Route path="main" element={<Admin />}></Route>
+            <Route path="/*" element={<Admin />}></Route>
         </Routes>
     )
 }
