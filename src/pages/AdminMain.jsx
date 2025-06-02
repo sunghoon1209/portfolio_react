@@ -8,18 +8,22 @@ const StyledAdmin = styled.div`
 `
 const StyledMain = styled.main`
     background-color: #f5f6fa;
+    flex-grow: 1;
+    padding: 20px;
+    height: 100vh;
 `
+
 
 const AdminMain = () =>{
     return(
         <StyledAdmin>
             <AdminHeader></AdminHeader>
-            <main>
+            <StyledMain>
                 <Routes>
                     <Route path="design" element={<AdminDesign/>}></Route>      
                     <Route path="works" element={<AdminWokrs/>}></Route>      
                 </Routes>
-            </main>
+            </StyledMain>
         </StyledAdmin>
     )
 }
