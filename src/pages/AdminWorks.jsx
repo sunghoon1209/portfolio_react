@@ -45,8 +45,8 @@ const WorkList = () => {
 const AdminWokrs = ()=>{
     return(
         <>
-            {/* <WorkList></WorkList> */}
-            <AdminworksAdd></AdminworksAdd>
+            <WorkList></WorkList>
+            {/* <AdminworksAdd></AdminworksAdd> */}
         </>
     )
 }

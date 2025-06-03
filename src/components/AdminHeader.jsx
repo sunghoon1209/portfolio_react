@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
 
 const StyledAdminHeader = styled.header`
     width: 240px;
@@ -21,12 +21,13 @@ const StyledAdminHeader = styled.header`
 `
 
 const AdminHeader = () => {
+    const navigate = useNavigate();
     return(
         <StyledAdminHeader>
            <ul>
-                <li>Main</li>
-                <li>Design</li>
-                <li>Works</li>                
+                <li onClick={()=>{navigate('/admin/')}}>Main</li>
+                <li onClick={()=>{navigate('/admin/design')}}>Design</li>
+                <li onClick={()=>{navigate('/admin/works')}}>Works</li>                
            </ul>
         </StyledAdminHeader>
     )
