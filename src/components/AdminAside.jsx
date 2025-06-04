@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const StyledAdminHeader = styled.header`
-    width: 240px;
-    background: #fff;
+const StyledAdminAside = styled.aside`
+    width: 380px;
+    color:#fff;
+    background-color: #101010;    
     height:100%;
     min-height: 100vh;
-    padding:24px 0;
+    padding:70px 80px;
 
     ul{
         display: flex;
@@ -20,17 +21,17 @@ const StyledAdminHeader = styled.header`
     }
 `
 
-const AdminHeader = () => {
+const AdminAside = () => {
     const navigate = useNavigate();
     return(
-        <StyledAdminHeader>
+        <StyledAdminAside>
            <ul>
                 <li onClick={()=>{navigate('/admin/')}}>Main</li>
                 <li onClick={()=>{navigate('/admin/design')}}>Design</li>
                 <li onClick={()=>{navigate('/admin/works')}}>Works</li>                
            </ul>
-        </StyledAdminHeader>
+        </StyledAdminAside>
     )
 }
 
-export default AdminHeader;
+export default AdminAside;

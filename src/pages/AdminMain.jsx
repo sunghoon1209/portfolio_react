@@ -1,24 +1,40 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AdminHeader from "../components/AdminHeader";
+
+import AdminAside from "../components/AdminAside";
 import styled from "styled-components";
 import AdminDesign from "./AdminDesign";
 import AdminWokrs from "./AdminWorks";
 const StyledAdmin = styled.div`
     display:flex;
 `
-const StyledMain = styled.main`
-    background-color: #f5f6fa;
+const StyledMain = styled.div`
+    background-color: #101010;
     flex-grow: 1;
-    padding: 20px;
-    height: 100vh;
+    height: 100vh;    
+    display: flex;
+    padding:20px;
+
+    
+
+    section{
+        width: 100%;
+        background-color: #fff;
+        border-radius: 30px;
+        min-height: 860px;
+        padding:80px 100px;
+        position: relative;
+    }
 `
+
+
 
 
 const AdminMain = () =>{
     return(
         <StyledAdmin>
-            <AdminHeader></AdminHeader>
+            <AdminAside></AdminAside>
             <StyledMain>
+               
                 <Routes>
                     <Route path="design" element={<AdminDesign/>}></Route>      
                     <Route path="works" element={<AdminWokrs/>}></Route>      
