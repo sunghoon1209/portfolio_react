@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
+import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";    
+
 import AdminworksAdd from "./AdminWorksAdd";
 
 // 작업물 목록
@@ -61,6 +64,7 @@ const StyledCard = styled.li`
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: transform 0.2s ease;
+    position: relative;
 
     &:hover{
       transform: translateY(-4px);
@@ -95,28 +99,44 @@ const StyledButtonAdd = styled.button`
     cursor: not-allowed;
   }
 `;
+const StyledWorksBtnCont =styled.div`
+  display: flex;
+  position: absolute;
+  gap:10px;
+  top:5px;
+  right:5px;
+`
 
-const StyledButtonModify = styled.button`
-  padding: 0.5rem 1rem;
-  background-color: black;
-  color: white;
-  border: 1px solid black;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+const StyleDeleteButton = styled.button`
+  padding:8px 16px;
+  background: red;
+  color:#fff;
+  border-radius: 5px;
+`
+const StyleModifyButton = styled.button`
+  padding:8px 16px;
+  background: green;
+  color:#fff; 
+  border-radius: 5px;
 
-  &:hover {
-    background-color: white;
-    color: black;
+`
+
+const handleDelete = async (docId) => {
+  const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
+  if (!confirmDelete) return;
+
+  try {
+    await deleteDoc(doc(db, "works", docId));
+    console.log("삭제 성공");
+
+    // 삭제된 문서 제외한 새 리스트로 갱신
+    setWorks(prev => prev.filter(work => work.id !== docId));
+  } catch (error) {
+    console.error("삭제 실패:", error);
+    alert("삭제에 실패했습니다.");
   }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-`;
-
+};
+const navigate = useNavigate();
     return (
       <section>
         <h2>작업물 목록</h2>
@@ -124,14 +144,18 @@ const StyledButtonModify = styled.button`
           <StyledSearchInput placeholder="검색어를 입력해주세요."></StyledSearchInput>          
         </StyleSearchArea>
         <StyledButtonContainer>
-          <StyledButtonAdd>추가</StyledButtonAdd>
-          <StyledButtonModify>수정</StyledButtonModify>
+          <StyledButtonAdd onClick={()=>{navigate('/admin/works/add')}}>추가</StyledButtonAdd>          
 
         </StyledButtonContainer>
         <StyleCardContainer>
 
             {works.map(work => (
               <StyledCard key={work.id}>
+                <StyledWorksBtnCont>
+                  <StyleModifyButton>수정</StyleModifyButton>
+                  <StyleDeleteButton onClick={() => handleDelete(work.id)}>삭제</StyleDeleteButton>
+                  
+                </StyledWorksBtnCont>
                 <h3>{work.name}</h3>
                 <p>{work.desc}</p>
                 <img src={work.imgSrc} alt={work.name} />
@@ -144,13 +168,12 @@ const StyledButtonModify = styled.button`
     );
   };
 
-const AdminWokrs = ()=>{
+const AdminWorks = ()=>{
     return(
         <>
             <WorkList></WorkList>
-            {/* <AdminworksAdd></AdminworksAdd> */}
         </>
     )
 }
 
-export default AdminWokrs;
+export default AdminWorks;

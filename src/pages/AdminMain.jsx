@@ -3,7 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminAside from "../components/AdminAside";
 import styled from "styled-components";
 import AdminDesign from "./AdminDesign";
-import AdminWokrs from "./AdminWorks";
+import AdminWorks from "./AdminWorks";
+import AdminworksAdd from "./AdminWorksAdd";
+
 const StyledAdmin = styled.div`
     display:flex;
 `
@@ -13,7 +15,7 @@ const StyledMain = styled.div`
     height: 100vh;    
     display: flex;
     padding:20px;
-
+    
     
 
     section{
@@ -37,7 +39,8 @@ const AdminMain = () =>{
                
                 <Routes>
                     <Route path="design" element={<AdminDesign/>}></Route>      
-                    <Route path="works" element={<AdminWokrs/>}></Route>      
+                    <Route path="works" element={<AdminWorks/>}></Route>      
+                    <Route path="works/add" element={<AdminworksAdd/>}></Route>      
                 </Routes>
             </StyledMain>
         </StyledAdmin>
