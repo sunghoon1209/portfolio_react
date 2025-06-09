@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StyledAdd = styled.section`
     background:#fff;
@@ -11,7 +12,7 @@ const StyledAdd = styled.section`
     flex-wrap: wrap;
     position: relative;
 `
-const StyledWrap = styled.div`
+const StyledWrap = styled.form`
     display: flex;
     flex-direction: column;
     width: 80%;
@@ -54,75 +55,85 @@ const StyledInput = styled.input`
     text-align: right;
 `
 
-const StyledIdxInput =styled.input`    
-    outline: none;
-    height: 28px;
-    width: 80%;    
-    text-align: right;
-    border: none;
-    padding-right: 0;
 
+const StyledTextArea = styled.textarea`
+    outline:none;
+    height: 120px;
+    width: 80%;
+    text-align: right;
+    resize: none;
+    padding:10px;
 `
 
 
 
 const AdminworksAdd = () =>{
+    const navigate = useNavigate();
+    const goBack = () => {
+        navigate(-1)
+    }
 
-    const [nextIdx, setNextIdx] = useState(0);
-    useEffect(() => {
-        const fetchNextIdx = async () => {
-            try {
-                // 'works' 컬렉션의 모든 문서를 가져옵니다.
-                const worksCollectionRef = collection(db, "works");
-                const data = await getDocs(worksCollectionRef);
-                
-                // 문서의 총개수 + 1을 다음 순번으로 설정합니다.
-                setNextIdx(data.size + 1);
-            } catch (error) {
-                console.error("Error fetching document count: ", error);
-            }
-        };
-
-        fetchNextIdx();
-    }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때 한 번만 실행되도록 설정
+    const [formData, setFormData] = useState({
+        title: "",
+        skills: "",
+        desc: "",
+        image: "",
+        link:"",
+        github: "",
+        year: "" 
+    });
 
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
+    // 추가 버튼 클릭시 데이터 저장 함수
+    const handleAdd = async () =>{
+        try{
+            const docRef = await addDoc(collection(db, "works"), {
+                ...formData
+            });
+            alert("저장되었습니다!");
+            goBack();
+        } catch(e){
+            console.error("Error adding document: ", e);
+            alert("저장 중 오류가 발생했습니다.");
+        }
+    }
 
     return(
         <StyledAdd>
             <StyledWrap>
-                <StyledLabel>
-                    <StyledSpan>순번</StyledSpan>
-                    <StyledIdxInput type="number" readOnly value={nextIdx || ""} />
-                </StyledLabel>
+
                 <StyledLabel>
                     <StyledSpan>제목</StyledSpan>
-                    <StyledInput type="text" />
+                    <StyledInput type="text" name="name" onChange={handleChange} />
                 </StyledLabel>
                 <StyledLabel>
                     <StyledSpan>사용기술</StyledSpan>
-                    <StyledInput type="text" />
+                    <StyledInput type="text" name="skills" onChange={handleChange} />
                 </StyledLabel>
                 <StyledLabel>
                     <StyledSpan>설명</StyledSpan>
-                    <StyledInput type="text" />
+                    <StyledTextArea type="text" name="desc" onChange={handleChange} />
                 </StyledLabel>
                 <StyledLabel>
                     <StyledSpan>이미지</StyledSpan>
-                    <StyledInput type="text" />
+                    <StyledInput type="text" name="image" onChange={handleChange} />
                 </StyledLabel>
                 <StyledLabel>
-                    <StyledSpan>깃허브링크</StyledSpan>
-                    <StyledInput type="text" />
+                    <StyledSpan>링크</StyledSpan>
+                    <StyledInput type="text" name="link" onChange={handleChange} />
                 </StyledLabel>
                 <StyledLabel>
                     <StyledSpan>제작연도</StyledSpan>
-                    <StyledInput type="text" />
+                    <StyledInput type="number" name="year" onChange={handleChange} />
                 </StyledLabel>
                
             </StyledWrap>
-            <StyledAddButton>추가</StyledAddButton>            
+            <StyledAddButton type="button" onClick={handleAdd}>추가</StyledAddButton>        
         </StyledAdd>
     )
 

@@ -51,6 +51,7 @@ const WorkList = () => {
       display: flex;
       flex-wrap: wrap;
       gap: 24px;
+      padding:20px 0;
     `
 
 
@@ -120,6 +121,12 @@ const StyleModifyButton = styled.button`
   border-radius: 5px;
 
 `
+const StyledTitle = styled.h3`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+`
 
 const handleDelete = async (docId) => {
   const confirmDelete = window.confirm('정말 삭제하시겠습니까?');
@@ -140,26 +147,20 @@ const navigate = useNavigate();
     return (
       <section>
         <h2>작업물 목록</h2>
-        <StyleSearchArea>
-          <StyledSearchInput placeholder="검색어를 입력해주세요."></StyledSearchInput>          
-        </StyleSearchArea>
         <StyledButtonContainer>
           <StyledButtonAdd onClick={()=>{navigate('/admin/works/add')}}>추가</StyledButtonAdd>          
-
         </StyledButtonContainer>
         <StyleCardContainer>
 
             {works.map(work => (
               <StyledCard key={work.id}>
                 <StyledWorksBtnCont>
-                  <StyleModifyButton>수정</StyleModifyButton>
                   <StyleDeleteButton onClick={() => handleDelete(work.id)}>삭제</StyleDeleteButton>
                   
                 </StyledWorksBtnCont>
-                <h3>{work.name}</h3>
-                <p>{work.desc}</p>
-                <img src={work.imgSrc} alt={work.name} />
-                <a href={work.github} target="_blank" rel="noreferrer">GitHub</a>
+                <StyledTitle>{work.name}</StyledTitle>
+                {/* <p>{work.desc}</p>
+                <img src={work.imgSrc} alt={work.name} /> */}
               </StyledCard>
             ))}
         </StyleCardContainer>
