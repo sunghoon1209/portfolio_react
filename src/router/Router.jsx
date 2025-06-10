@@ -7,6 +7,7 @@ import Header from "../components/common/Header";
 import StyledInner from "../components/common/Inner";
 
 import Admin from "../Admin";
+import AdminLogin from "../pages/AdminLogin";
 const UserRouter = ()=>{
     return(
         <>
@@ -28,6 +29,7 @@ const AdminRouter = ()=>{
     return(
         <Routes>
             <Route path="/*" element={<Admin />}></Route>
+            <Route path="/login" element={<AdminLogin />}></Route>
         </Routes>
     )
 }

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth} from "../firebase";
 import useAuthStore from "../store/useAuthStore";
-
+import { useNavigate } from "react-router-dom";
 const StyledAdminSection = styled.section`
     width: 100%;
     height: 100vh;
@@ -76,6 +76,10 @@ const StyledButton = styled.button`
 const AdminLogin = ()=>{
     const [email, setEmail] = useState("sunghoon.developer@gmail.com"); // 고정값
     const [pwInputValue, setPwInputValue] = useState('');
+
+    const navigate = useNavigate();
+    
+
     const handleChange = (e)=>{
         setPwInputValue(e.target.value);
     }
@@ -87,6 +91,7 @@ const AdminLogin = ()=>{
             useAuthStore.getState().setUser(user);
 
             alert("로그인 성공");
+            navigate('/admin');
             // 예: 페이지 이동하거나 상태 저장
           } catch (e) {
             alert("관리자가 아니면 둘러보기 버튼을 눌러주세요.");
@@ -99,7 +104,7 @@ const AdminLogin = ()=>{
                 <p>관리자페이지</p>
                 <StyledPasswordInput type="password" placeholder="비밀번호" value={pwInputValue} onChange={handleChange}/>
                 <StyledButton bgColor="#333" textColor="white" onClick={handleLogin}>로그인</StyledButton>
-                <StyledButton bgColor="#f5a623" textColor="#000">둘러보기</StyledButton>
+                <StyledButton bgColor="#f5a623" textColor="#000" onClick={()=>navigate('/admin')}>둘러보기</StyledButton>
             </StyledLoginBox>
         </StyledAdminSection>
     )

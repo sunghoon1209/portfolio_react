@@ -3,6 +3,8 @@ import { collection, getDocs, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../firebase";
 
 const StyledAdd = styled.section`
     background:#fff;
@@ -64,10 +66,19 @@ const StyledTextArea = styled.textarea`
     resize: none;
     padding:10px;
 `
+const StyledImgPreview = styled.div`
+    width: 80%;
+    aspect-ratio: 1/0.4;
+    border:1px solid #ddd;
+    padding:10px;
+
+`
 
 
 
 const AdminworksAdd = () =>{
+    const [imageFile, setImageFile] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
     const navigate = useNavigate();
     const goBack = () => {
         navigate(-1)
@@ -89,19 +100,36 @@ const AdminworksAdd = () =>{
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file); // 아직 업로드 X
+        }
+    };
     // 추가 버튼 클릭시 데이터 저장 함수
-    const handleAdd = async () =>{
-        try{
-            const docRef = await addDoc(collection(db, "works"), {
-                ...formData
+    const handleAdd = async () => {
+        try {
+            let imageUrl = "";
+    
+            if (imageFile) {
+                const fileName = `${Date.now()}_${imageFile.name}`;
+                const storageRef = ref(storage, `images/${fileName}`);
+                await uploadBytes(storageRef, imageFile);
+                imageUrl = await getDownloadURL(storageRef);
+            }
+    
+            await addDoc(collection(db, "works"), {
+                ...formData,
+                image: imageUrl
             });
+    
             alert("저장되었습니다!");
             goBack();
-        } catch(e){
-            console.error("Error adding document: ", e);
+        } catch (e) {
+            console.error("저장 오류:", e);
             alert("저장 중 오류가 발생했습니다.");
         }
-    }
+    };
 
     return(
         <StyledAdd>
@@ -121,7 +149,13 @@ const AdminworksAdd = () =>{
                 </StyledLabel>
                 <StyledLabel>
                     <StyledSpan>이미지</StyledSpan>
-                    <StyledInput type="text" name="image" onChange={handleChange} />
+                    <input type="file" onChange={handleFileChange} />
+                </StyledLabel>
+                <StyledLabel>
+                    <StyledSpan>이미지 미리보기</StyledSpan>
+                    <StyledImgPreview>
+                        {imageUrl && <img src={imageUrl} alt="미리보기" style={{width: '100%'}} />}
+                    </StyledImgPreview>
                 </StyledLabel>
                 <StyledLabel>
                     <StyledSpan>링크</StyledSpan>

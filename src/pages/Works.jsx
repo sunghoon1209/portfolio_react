@@ -1,5 +1,8 @@
-import styled from "styled-components"
-import img from "../assets/images/simtos.png"
+import styled from "styled-components";
+import img from "../assets/images/simtos.png";
+import { useEffect,useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 
 const StyledWorksSection = styled.section`
     padding:36px 0;
@@ -46,20 +49,40 @@ const StyledCardImg = styled.img`
 
 `
 
-const Card = () => {
+const Card = ({ image, name }) => {
     return (
-        <StyledCard>
-            <StyledCardImg src={img} ></StyledCardImg>
-            <StyledTitle>SIMTOS 2025</StyledTitle>
-        </StyledCard>
-    )
-}
+      <StyledCard>
+        <StyledCardImg src={image || "기본이미지.png"} alt={name} />
+        <StyledTitle>{name}</StyledTitle>
+      </StyledCard>
+    );
+  };
 
 const Works = ()=>{
+    const [works, setWorks] = useState([]);
+
+    useEffect(() => {
+      const fetchWorks = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, "works"));
+          const data = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          setWorks(data);
+        } catch (error) {
+          console.error("Error fetching works:", error);
+        }
+      };
+  
+      fetchWorks();
+    }, []);
     return(
         <>
             <StyledWorksSection>
-                <Card></Card>
+            {works.map(work => (
+                <Card key={work.id} image={work.image} name={work.name} />
+            ))}
             </StyledWorksSection>
         </>
     )
